@@ -3,7 +3,7 @@ def arctic_ocean_mask(region='Nof80'):
     import xarray as xr
     import os
     
-    mdiri = "/home/apbarret/projects/ancillary/masks"
+    mdiri = "/oldhome/apbarret/projects/ancillary/masks"
     mfili = "arctic_mask_cfsr.nc"
     
     ds = xr.open_dataset(os.path.join(mdiri, mfili))
@@ -53,7 +53,7 @@ region = 'arctic_ocean'
 
 weight = get_weight(region=region)
 
-for year in np.arange(2017,2018):
+for year in np.arange(2017,2019):
 
        diri = '/disks/arctic5_raid/abarrett'
        if year < 2011:
@@ -78,5 +78,5 @@ for year in np.arange(2017,2018):
        filo = reanalysis+'.T925.arctic.avg.'+repr(year)+'.'+region+'.nc'
        outstr = os.path.join(diri,reanalysis,'T',repr(year),filo)
 
-       print 'Writing data from '+repr(year)+' to '+outstr
+       print ('Writing data from '+repr(year)+' to '+outstr)
        tavg.to_netcdf(outstr, mode='w')

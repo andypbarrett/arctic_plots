@@ -28,5 +28,9 @@ ds = read_netcdfs(fileList, 'time')
 
 ds.time.encoding['units'] = 'days since 1900-01-01 00:00:00'
 
-ds.to_netcdf('/disks/arctic5_raid/abarrett/CFSR2/T/CFSR2.T925.arctic.avg.1979to2017.'+region+'.nc')
+diro = '/disks/arctic5_raid/abarrett/CFSR2/T'
+filo = 'CFSR2.T925.arctic.avg.{:4d}to{:4d}.{:s}.nc'.format(pd.to_datetime(ds['time'].data)[0].year,
+                                                           pd.to_datetime(ds['time'].data)[-1].year,
+                                                           region)
+ds.to_netcdf( os.path.join(diro,filo) )
 
