@@ -1,0 +1,91 @@
+This file describes the workflow for generating Freezing Degree Day
+plots from CFSR and CFSRv2 temperature data.
+
+Processing code is in $HOME/src/arctic_temperatures
+
+Download
+--------
+
+Data are downloaded from the NCAR Research Data Archive ds094.0 NCEP
+Climate Forecast System Version 2 (CFSRv2) 6-hourly products page
+https://rda.ucar.edu/datasets/ds094.0/
+
+I use the subsetter and web download options to download 6 hourly
+*analysis* fields on standard isobaric surfaces for the 0.5x0.5 degree
+grid.  I select the netcdf conversion option. 
+
+Subset details:
+  Date range: 201803010000 to 201804050300
+  Parameter(s): 
+     Temperature
+  Level(s):
+     Isobaric surface: 1000 mbar
+     Isobaric surface: 925 mbar
+     Isobaric surface: 850 mbar
+     Isobaric surface: 700 mbar
+     Isobaric surface: 500 mbar
+     Isobaric surface: 300 mbar
+  Product(s):
+    Analysis
+  Grid: 0.5-deg x 0.5-deg from 0E to 359.5E and 90N to 90S (720 x 361 Longitude/Latitude)
+  Output format conversion: netCDF
+
+Data are saved to
+/disks/arctic5_raid/abarrett/CFSR2/T/new_netcdf_files
+
+
+Convert 6-hourly to daily mean temperature
+------------------------------------------
+
+Use cfsrv2_6hr2daily.py to aggregate to daily time step
+
+usage: cfsrv2_6hr2daily.py [-h] [--date_begin DATE_BEGIN]
+                           [--date_end DATE_END] [--verbose]
+
+Convert CFSR or CFSRv2 6h files to daily
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --date_begin DATE_BEGIN
+                        date to start processing YYYYMMDD
+  --date_end DATE_END   date to end processing YYYYMMDD
+  --verbose
+
+
+Regrid daily temperature fields
+-------------------------------
+
+Use regrid_cfsrv2.py to regrid temperature fields
+
+usage: regrid_cfsrv2.py [-h] [--verbose] [--doplot]
+                        variable outgrid date [date ...]
+
+Regrid CFSRv2 data
+
+positional arguments:
+  variable    variable to process
+  outgrid     Name of outgrid (e.g. EASE_NH50km)
+  date        single date, list of dates or date range (YYYYMMDD YYYYMMDD...
+              or YYYYMMDD..YYYYMMDD
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --verbose
+  --doplot
+
+
+Calculate Freezing Degree Day totals
+---------------------------------------
+
+Freezing degree day totals are calculated using calc_fdd.py.  This
+calculates FDD for a given year from 1 Oct to a given date YYYYMMDD.  A
+short batch routine script calc_fdd_batch.py will generate FDD totals
+for each year.  This batch script needs to be edited.
+
+
+Plot anomalies
+--------------
+
+Anomalies are calculated and plotted using plot_fdd_anomalies.py.
+
+
